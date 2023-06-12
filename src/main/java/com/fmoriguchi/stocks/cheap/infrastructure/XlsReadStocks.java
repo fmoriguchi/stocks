@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.fmoriguchi.stocks.infrastructure;
+package com.fmoriguchi.stocks.cheap.infrastructure;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
