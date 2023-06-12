@@ -40,6 +40,6 @@ class Liquidity implements StocksFilter {
 
 	private boolean hasGoodEquility(Stocks stock) {
 		
-		return limit.compareTo(stock.liquidity()) <= 0;
+		return stock.liquidity() != null && limit.compareTo(stock.liquidity()) <= 0;
 	}
 }

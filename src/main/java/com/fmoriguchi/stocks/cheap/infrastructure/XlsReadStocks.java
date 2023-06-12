@@ -3,9 +3,10 @@
  */
 package com.fmoriguchi.stocks.cheap.infrastructure;
 
+import static java.math.RoundingMode.HALF_EVEN;
+
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -27,7 +28,8 @@ import com.fmoriguchi.stocks.cheap.domain.Stocks;
 public class XlsReadStocks implements ReadStocks {
 	
 	private static final Logger log = LoggerFactory.getLogger(XlsReadStocks.class);
-	
+
+	private static final BigDecimal ONE_HUNDRED = new BigDecimal("100");
 	private static final int FIRST_SHEET = 0;
 	private static final int NAME = 0;
 	private static final int PRICE = 1;
@@ -99,42 +101,47 @@ public class XlsReadStocks implements ReadStocks {
 			log.error("Cannot read position {}:{} from stock {}. Problem > {}", cell.getAddress().getRow(), cell.getAddress().getColumn(), stock.name, e.getMessage());
 		}
 	}
-	
+	 
 	private static final class StockStructure {
 
 		String name;
-		Double price;
-		Double ebitMargin;
-		Double evEbit;
-		Double dividendYield;
-		Double equility;
+		BigDecimal price;
+		BigDecimal ebitMargin;
+		BigDecimal evEbit;
+		BigDecimal dividendYield;
+		BigDecimal equility;
 		
 		Stocks to() {
 
-			return new Stocks(name, BigDecimal.valueOf(price), BigDecimal.valueOf(ebitMargin), BigDecimal.valueOf(evEbit), BigDecimal.valueOf(dividendYield), BigDecimal.valueOf(equility));
+			return new Stocks(name, 
+							  price.setScale(2, HALF_EVEN), 
+							  ebitMargin.setScale(2, HALF_EVEN), 
+							  evEbit.setScale(2, HALF_EVEN), 
+							  dividendYield.setScale(2, HALF_EVEN), 
+							  equility.setScale(0, HALF_EVEN));
 		}
 	}
 	
-	private Double getNumericCellValue(Cell cell, StockStructure stock) {
+	private BigDecimal getNumericCellValue(Cell cell, StockStructure stock) {
 		
 		try {
 
-			return cell.getNumericCellValue();
+			return BigDecimal.valueOf(cell.getNumericCellValue());
 			
 		}catch (Exception e) {
+
 			log.error("Cannot read position {}:{} from stock {}. Problem > {}", cell.getAddress().getRow(), cell.getAddress().getColumn(), stock.name, e.getMessage());
-			return 0d;
+			return BigDecimal.ZERO;
 		}
 		
 	}
 	
-	private Double getPercentageCellValue(Cell cell, StockStructure stock) {
+	private BigDecimal getPercentageCellValue(Cell cell, StockStructure stock) {
 		
 		if (cell.getCellStyle().getDataFormatString().contains("%")) {
 
-			var value = BigDecimal.valueOf(getNumericCellValue(cell, stock) * 100);
-
-			return value.setScale(2, RoundingMode.HALF_EVEN).doubleValue();
+			return getNumericCellValue(cell, stock)
+						.multiply(ONE_HUNDRED);
 		}
 		
 		return getNumericCellValue(cell, stock);
