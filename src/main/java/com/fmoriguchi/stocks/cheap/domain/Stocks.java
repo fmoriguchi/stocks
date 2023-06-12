@@ -9,9 +9,9 @@ import java.math.BigDecimal;
  */
 public record Stocks(String name, 
 					 BigDecimal price, 
-					 Double ebitMargin, 
-					 Double evEbit, 
-					 Double dividendYield,
+					 BigDecimal ebitMargin, 
+					 BigDecimal evEbit, 
+					 BigDecimal dividendYield,
 					 BigDecimal liquidity) {
 	
 	public String companyID() {

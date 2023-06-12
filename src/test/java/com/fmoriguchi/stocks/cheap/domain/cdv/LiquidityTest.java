@@ -33,13 +33,13 @@ class LiquidityTest {
 	private Collection<Stocks> stocks() {
 
 		var stocks = new ArrayList<Stocks>();
-		stocks.add(new Stocks("KOFE4", new BigDecimal("20.97"), 7.55, 2.16, 0.0, new BigDecimal("5891")));
-		stocks.add(new Stocks("ACME4", new BigDecimal("15.55"), 1.55, 12.16, 0.0, new BigDecimal("5891.375")));
-		stocks.add(new Stocks("MKII4", new BigDecimal("13.96"), 6.55, 13.16, 0.0, new BigDecimal("1858911.375")));
-		stocks.add(new Stocks("DBGT3", new BigDecimal("60"), 5.55, 16.1, 0.0, new BigDecimal("205891.375")));
-		stocks.add(new Stocks("UMBR3", new BigDecimal("5.50"), 4.56, 21.0, 0.0, new BigDecimal("891.375")));
-		stocks.add(new Stocks("SFZU3", new BigDecimal("10"), 10.55, 21.16, 0.0, new BigDecimal("5891375")));
-		stocks.add(new Stocks("CPSC4", new BigDecimal("20.55"), 2.55, 22.16, 0.0, new BigDecimal("158911.375")));
+		stocks.add(new Stocks("KOFE4", new BigDecimal("20.97"), new BigDecimal("7.55"), new BigDecimal("2.16"), BigDecimal.ZERO, new BigDecimal("5891")));
+		stocks.add(new Stocks("ACME4", new BigDecimal("15.55"), new BigDecimal("1.55"), new BigDecimal("12.16"), BigDecimal.ZERO, new BigDecimal("5891.375")));
+		stocks.add(new Stocks("MKII4", new BigDecimal("13.96"), new BigDecimal("6.55"), new BigDecimal("13.16"), BigDecimal.ZERO, new BigDecimal("1858911.375")));
+		stocks.add(new Stocks("DBGT3", new BigDecimal("60"), new BigDecimal("5.55"), new BigDecimal("16.1"), BigDecimal.ZERO, new BigDecimal("205891.375")));
+		stocks.add(new Stocks("UMBR3", new BigDecimal("5.50"), new BigDecimal("4.56"), new BigDecimal("21.0"), BigDecimal.ZERO, new BigDecimal("891.375")));
+		stocks.add(new Stocks("SFZU3", new BigDecimal("10"), new BigDecimal("10.55"), new BigDecimal("21.16"), BigDecimal.ZERO, new BigDecimal("5891375")));
+		stocks.add(new Stocks("CPSC4", new BigDecimal("20.55"), new BigDecimal("2.55"), new BigDecimal("22.16"), BigDecimal.ZERO, new BigDecimal("158911.375")));
 
 		return stocks;
 	}

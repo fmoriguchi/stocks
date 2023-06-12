@@ -111,7 +111,7 @@ public class XlsReadStocks implements ReadStocks {
 		
 		Stocks to() {
 
-			return new Stocks(name, BigDecimal.valueOf(price), ebitMargin, evEbit, dividendYield, BigDecimal.valueOf(equility));
+			return new Stocks(name, BigDecimal.valueOf(price), BigDecimal.valueOf(ebitMargin), BigDecimal.valueOf(evEbit), BigDecimal.valueOf(dividendYield), BigDecimal.valueOf(equility));
 		}
 	}
 	

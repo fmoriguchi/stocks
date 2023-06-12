@@ -25,6 +25,6 @@ class PositiveEbitMargin implements StocksFilter {
 
 	private boolean positive(Stocks stocks) {
 		
-		return stocks.ebitMargin() != null && stocks.ebitMargin() > 0;
+		return stocks.ebitMargin() != null && stocks.ebitMargin().signum() > 0;
 	}
 }
