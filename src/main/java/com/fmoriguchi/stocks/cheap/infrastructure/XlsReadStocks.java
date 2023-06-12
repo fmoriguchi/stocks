@@ -118,7 +118,7 @@ public class XlsReadStocks implements ReadStocks {
 							  ebitMargin.setScale(2, HALF_EVEN), 
 							  evEbit.setScale(2, HALF_EVEN), 
 							  dividendYield.setScale(2, HALF_EVEN), 
-							  equility.setScale(0, HALF_EVEN));
+							  equility.setScale(2, HALF_EVEN));
 		}
 	}
 	
