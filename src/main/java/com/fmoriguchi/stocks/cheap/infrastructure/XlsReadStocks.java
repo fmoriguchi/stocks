@@ -3,6 +3,7 @@
  */
 package com.fmoriguchi.stocks.cheap.infrastructure;
 
+import static java.math.BigDecimal.ZERO;
 import static java.math.RoundingMode.HALF_EVEN;
 
 import java.io.InputStream;
@@ -12,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -95,13 +97,15 @@ public class XlsReadStocks implements ReadStocks {
 				case EV_EBIT -> stock.evEbit = getNumericCellValue(cell, stock);
 				case DIVIDEND_YIELD -> stock.dividendYield = getPercentageCellValue(cell, stock);
 				case EQUILITY -> stock.equility = getNumericCellValue(cell, stock);
+				default -> log.warn("Column '{}' is not mapped to read", cell.getColumnIndex());
 			}
 			
 		} catch (Exception e) {
-			log.error("Cannot read position {}:{} from stock {}. Problem > {}", cell.getAddress().getRow(), cell.getAddress().getColumn(), stock.name, e.getMessage());
+			
+			cannotReadPosition(cell, stock, e);
 		}
 	}
-	 
+
 	private static final class StockStructure {
 
 		String name;
@@ -114,24 +118,29 @@ public class XlsReadStocks implements ReadStocks {
 		Stocks to() {
 
 			return new Stocks(name, 
-							  price.setScale(2, HALF_EVEN), 
-							  ebitMargin.setScale(2, HALF_EVEN), 
-							  evEbit.setScale(2, HALF_EVEN), 
-							  dividendYield.setScale(2, HALF_EVEN), 
-							  equility.setScale(2, HALF_EVEN));
+							  treat(price), 
+							  treat(ebitMargin), 
+							  treat(evEbit), 
+							  treat(dividendYield), 
+							  treat(equility));
+		}
+		
+		private BigDecimal treat(BigDecimal value) {
+			
+			return value != null ? value.setScale(2, HALF_EVEN) : ZERO;
 		}
 	}
 	
 	private BigDecimal getNumericCellValue(Cell cell, StockStructure stock) {
 		
 		try {
-
+			
 			return BigDecimal.valueOf(cell.getNumericCellValue());
 			
-		}catch (Exception e) {
+		} catch (Exception e) {
 
-			log.error("Cannot read position {}:{} from stock {}. Problem > {}", cell.getAddress().getRow(), cell.getAddress().getColumn(), stock.name, e.getMessage());
-			return BigDecimal.ZERO;
+			cannotReadPosition(cell, stock, e);
+			return ZERO;
 		}
 		
 	}
@@ -144,6 +153,15 @@ public class XlsReadStocks implements ReadStocks {
 						.multiply(ONE_HUNDRED);
 		}
 		
+		if (CellType.STRING.equals(cell.getCellType())) {
+			return new BigDecimal(cell.getStringCellValue().replace("%", "").replace(",", "."));
+		}
+
 		return getNumericCellValue(cell, stock);
+	}
+	
+	private void cannotReadPosition(Cell cell, StockStructure stock, Exception e) {
+
+		log.error("Cannot read position C:{}/R:{} from stock {}. Problem > {}", cell.getColumnIndex(), cell.getRowIndex(), stock.name, e.getMessage());
 	}
 }
