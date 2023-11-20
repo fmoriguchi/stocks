@@ -30,7 +30,7 @@ class CheapStocksResource {
 	
 	private final CheckCheapStocks cheapStocks;
 	
-	public CheapStocksResource(CheckCheapStocks cheapStocks) {
+	CheapStocksResource(CheckCheapStocks cheapStocks) {
 		this.cheapStocks = cheapStocks;
 	}
 
