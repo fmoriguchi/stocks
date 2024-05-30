@@ -1,6 +1,6 @@
 services:
   stocks:
-      image: fmoriguchi/stocks:0.0.3
+      image: fmoriguchi/stocks:0.0.4
       build: .
       ports:
         - "80:8080"
